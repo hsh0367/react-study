@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Counter from './Counter';
+import InputSample from './InputSample';
 function App() {
   const name = "first";
   const style = {
@@ -10,7 +10,7 @@ function App() {
     padding: '1rem'
   }
   return (
-    <Counter></Counter>
+    <InputSample />
   );
 }
 
