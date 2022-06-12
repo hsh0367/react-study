@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import InputSample from './InputSample';
+import UserList from './UserList';
 function App() {
   const name = "first";
   const style = {
@@ -10,7 +11,7 @@ function App() {
     padding: '1rem'
   }
   return (
-    <InputSample />
+    <UserList />
   );
 }
 
