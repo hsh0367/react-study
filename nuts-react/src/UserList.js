@@ -17,8 +17,8 @@ Map에서 Key가 필요한 이유
     return (
             <div>
                 {
-                    users.map(user => (
-                        <User user={user} key={user.id}/>
+                    users.map((user, index) => (
+                        <User user={user} key={index}/>
                     ))
                 }
             </div>
