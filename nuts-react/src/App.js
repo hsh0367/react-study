@@ -5,9 +5,10 @@ import CreateUser from './CreateUser';
 function App() {
   const [inputs, setInputs] = useState({
     username: '',
-    email: ''
+    email: '',
+    active: false
   });
-  const { username, email} = inputs;
+  const { username, email, active} = inputs;
   const onChange = e => {
     const { name, value} = e.target;
     setInputs({
@@ -19,7 +20,8 @@ function App() {
     {
       id: 1,
       username: 'velopert',
-      email: 'public.velopert@gmail.com'
+      email: 'public.velopert@gmail.com',
+      active: true
     }
   ]);
     
@@ -29,12 +31,14 @@ function App() {
     const user = {
       id: nextId.current,
       username,
-      email
+      email,
+      active
     };
     setUsers(users.concat(user));
     setInputs({
       username: '',
-      email: ''
+      email: '',
+      active: false
     });
     nextId.current += 1;
   }
@@ -59,6 +63,13 @@ function App() {
     // = user.id 가 id인것을 제거함
     setUsers(users.filter(user => user.id !== id));
   };
+  const onToggle = id =>{
+    setUsers(
+      users.map(user=>
+        user.id === id ? {...user, active: !user.active} : user
+      )
+    );
+  };
   return (
     <>
       <CreateUser
@@ -66,7 +77,7 @@ function App() {
         email={email}
         onChange={onChange}
         onCreate={onCreate}/>
-        <UserList users={users} onRemove={onRemove}/>
+        <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>
 
     </>
   );
