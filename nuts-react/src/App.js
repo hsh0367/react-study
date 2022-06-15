@@ -1,30 +1,30 @@
-import React, {useRef, useState, useMemo} from 'react';
+import React, {useRef, useState, useMemo, useCallback} from 'react';
 import './App.css';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
-// function countActiveUsers(users){
-//   console.log('활성 사용자 수를 세는중...')
-//   return users.filter(user => user.active).length;
-// }
+function countActiveUsers(users){
+  console.log('활성 사용자 수를 세는중...')
+  return users.filter(user => user.active).length;
+}
 function App() {
-  const countActiveUsers = () => {
-    console.log('활성 사용자 수를 세는중...')
-    return users.filter(user => user.active).length;
-  }
+  // const countActiveUsers = () => {
+  //   console.log('활성 사용자 수를 세는중...')
+  //   return users.filter(user => user.active).length;
+  // }
   const [inputs, setInputs] = useState({
     username: '',
     email: '',
     active: false
   });
   const { username, email, active} = inputs;
-  const onChange = e => {
+  const onChange = useCallback( e => {
     const { name, value} = e.target;
     setInputs({
       ...inputs,
       [name]: value
     });
-  }
+  }, [inputs]);
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -36,7 +36,7 @@ function App() {
     
  
   const nextId = useRef(2);
-  const onCreate = () => {
+  const onCreate = useCallback( () => {
     const user = {
       id: nextId.current,
       username,
@@ -50,7 +50,7 @@ function App() {
       active: false
     });
     nextId.current += 1;
-  }
+  },[users, username, email]);
 
   /*
   질문 ------
@@ -66,19 +66,32 @@ function App() {
   이런 경우에 onClick = { onRemove(user.id) } 를 해버리면, 해당 콤포넌트가 렌더링됨가 동시에 이 함수 실행이 되어버려서 아마 아무것도 렌더링이 되어버리지 않을거에요. 콘솔에서도 오류메시지가 발생할거구요.
 
   따라서 이런 문제들을 해결하기 위해 onClick에 콜백 함수를 넣어주고, 해당 함수가 실행될 때 user.id를 건네주어 실행시키는 방법으로 처리를 하는거에요
+  -------------
+  seCallback : 특정 함수 재사용
+  useMemo: 특정 결과값 재사용
+
+  컴포넌트에서 props 가 바뀌지 않았으면
+  Virtual DOM 에 새로 렌더링하는 것 조차 하지 않고
+  컴포넌트의 결과물을 재사용 하는 최적화 작업을 하려면,
+  ***함수 재사용 필수
+
+  deps 배열에 꼭 포함되야 하는 것: 함수 안에서 사용하는 상태 혹은 props
+
+  컴포넌트 렌더링 최적화 작업을 해주어야만 성능이 최적화 : useCallback & React.memo
   */
-  const onRemove =  id =>{
+
+  const onRemove = useCallback( id => {
     // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = user.id 가 id인것을 제거함
     setUsers(users.filter(user => user.id !== id));
-  };
-  const onToggle = id =>{
+  }, [users]);
+  const onToggle = useCallback(id =>{
     setUsers(
       users.map(user=>
         user.id === id ? {...user, active: !user.active} : user
       )
     );
-  };
+  }, [users]);
   const count = useMemo( () => countActiveUsers(users), [users]);
   return (
     <>
