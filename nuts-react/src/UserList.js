@@ -9,7 +9,7 @@ useEffect
     deps에 넣은 파라미터값이 업데이트 됬을때 실행.
     componentDidUpdate처럼 실행.
 */
- function User({user, onRemove, onToggle}){
+ const User = React.memo(function User({user, onRemove, onToggle}){
     useEffect(()=>{
         console.log('user 값이 설정됨');
         return () => {
@@ -27,18 +27,18 @@ useEffect
             <span>/ {user.active.toString()}</span>
             <button onClick={()=> onRemove(user.id)}> 삭제</button>
         </div>
-    )
- }
-
- function UserList({users, onRemove, onToggle}){
-    return (
-            <div>
-                {
-                    users.map((user, index) => (
-                        <User user={user} key={index} onRemove={onRemove} onToggle={onToggle}/>
-                    ))
-                }
-            </div>
     );
- }
+ });
+
+ const UserList = React.memo(function UserList({users, onRemove, onToggle}){
+    return (
+        <div>
+            {
+                users.map((user, index) => (
+                    <User user={user} key={index} onRemove={onRemove} onToggle={onToggle}/>
+                ))
+            }
+        </div>
+    );
+ });
  export default UserList;

@@ -19,6 +19,7 @@ function App() {
   });
   const { username, email, active} = inputs;
   const onChange = useCallback( e => {
+    console.log("onChange");
     const { name, value} = e.target;
     setInputs({
       ...inputs,
@@ -37,6 +38,7 @@ function App() {
  
   const nextId = useRef(2);
   const onCreate = useCallback( () => {
+    console.log("onCreate");
     const user = {
       id: nextId.current,
       username,
@@ -83,10 +85,11 @@ function App() {
   const onRemove = useCallback( id => {
     // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = user.id 가 id인것을 제거함
+    console.log("onRemove");
     setUsers(users.filter(user => user.id !== id));
   }, [users]);
   const onToggle = useCallback(id =>{
-    setUsers(
+    setUsers(user =>
       users.map(user=>
         user.id === id ? {...user, active: !user.active} : user
       )
