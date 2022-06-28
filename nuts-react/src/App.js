@@ -8,6 +8,19 @@ function countActiveUsers(users){
   return users.filter(user => user.active).length;
 }
 
+const initialState = {
+  inputs : {
+    username: '',
+    email: '',
+    active: false
+  },
+  users :  [{
+    id: 1,
+    username: 'velopert',
+    email: 'public.velopert@gmail.com',
+    active: true
+  }]
+}
 function reducer(state, action){
   switch (action.type){
     case "CHANGE_INPUT":
@@ -37,20 +50,8 @@ function reducer(state, action){
       return state
   }
 }
+export const UserDispatch = React.createContext(null);
 
-const initialState = {
-  inputs : {
-    username: '',
-    email: '',
-    active: false
-  },
-  users :  [{
-    id: 1,
-    username: 'velopert',
-    email: 'public.velopert@gmail.com',
-    active: true
-  }]
-}
 function App() {
   // const countActiveUsers = () => {
   //   console.log('활성 사용자 수를 세는중...')
@@ -70,8 +71,8 @@ function App() {
   //   const { name, value} = e.target;
   //   dispatch({
   //     type: "CHANGE_INPUT",
-  //     name, 
-  //     value
+  //     name, qaw  q
+   //     value
   //   });
   // }, []);
     
@@ -91,34 +92,17 @@ function App() {
     reset();
   },[username, email, active]);
 
-  const onRemove = useCallback( id => {
-    // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
-    // = user.id 가 id인것을 제거함
-    console.log("onRemove");
-    dispatch({
-      type: "REMOVE_USER",
-      id
-    });
-  }, []);
-  const onToggle = useCallback(id =>{
-    dispatch(
-      {
-        type: "TOGGLE", 
-        id
-      }
-    );
-  }, [users]);
   const count = useMemo( () => countActiveUsers(users), [users]);
   return (
-    <>
+    <UserDispatch.Provider value={dispatch}>
       <CreateUser
         username={username}
         email={email}
         onChange={onChange}
         onCreate={onCreate}/>
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>
+      <UserList users={users}/>
       <div> 활성사용자 수 : {count}</div>
-    </>
+    </UserDispatch.Provider>
   );
 }
 
