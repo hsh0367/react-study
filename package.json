@@ -3,6 +3,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "polished": "^4.2.2",
+    "qs": "^6.11.0",
     "react-async": "^10.0.1"
   }
 }
